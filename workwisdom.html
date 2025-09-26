@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWisdom.ai - Your AI Career & Productivity Coach</title>
+    <meta name="description" content="Your one-stop shop for professional development. Generate free, personalized prompts or upgrade to Pro for a guided AI chat experience with a career coach.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #06b6d4;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
+        .step.active { display: block; }
+        .step { display: none; }
+        .response-text p { margin-bottom: 1rem; }
+        .response-text ul { list-style-type: disc; list-style-position: inside; margin-left: 1rem; margin-bottom: 1rem; }
+        .response-text li { margin-bottom: 0.5rem; }
+        .loader-dots div { animation: bounce 1.4s infinite ease-in-out both; }
+        .loader-dots .dot1 { animation-delay: -0.32s; }
+        .loader-dots .dot2 { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .prompt-cue-card {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-lg border-b border-slate-200 fixed top-0 left-0 right-0 z-40">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <a href="#" onclick="showPage('home')" class="text-2xl font-extrabold gradient-text flex items-center gap-2">
+                <span class="text-3xl">🧠</span> WorkWisdom.ai
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" id="nav-home" class="nav-link text-slate-600 hover:text-indigo-600 transition-colors" onclick="showPage('home')">Home</a>
+                <a href="#" id="nav-coach" class="nav-link text-slate-600 hover:text-indigo-600 transition-colors" onclick="showPage('coach')">AI Coach</a>
+                <a href="#" id="nav-resources" class="nav-link text-slate-600 hover:text-indigo-600 transition-colors" onclick="showPage('resources')">Resources</a>
+                <a href="#" id="nav-community" class="nav-link text-slate-600 hover:text-indigo-600 transition-colors" onclick="showPage('community')">Community</a>
+            </div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="showOnboarding()">
+                My Profile
+            </button>
+        </nav>
+    </header>
+
+    <main class="pt-20">
+
+        <!-- Home Page -->
+        <div id="homePage" class="page-content">
+            <section class="hero-gradient text-white">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+                    <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Your AI Career & Productivity Partner</h1>
+                    <p class="text-lg md:text-xl text-indigo-200 mb-8 max-w-3xl mx-auto">Stop guessing, start growing. Get personalized AI prompts and coaching for presentations, emails, strategy, and every challenge in your professional life.</p>
+                    <button onclick="showPage('coach')" class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-lg shadow-xl transition-transform transform hover:scale-105">Meet Your AI Coach</button>
+                </div>
+            </section>
+
+             <section class="py-20 bg-slate-100">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                         <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Unlock Peak Performance</h2>
+                         <p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">Tools designed for ambitious professionals who want to work smarter, not harder.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center"><div class="text-4xl mb-4">🎯</div><h3 class="text-xl font-bold mb-2">Context-Aware Prompts</h3><p class="text-slate-600">Our AI uses your professional profile to generate hyper-relevant prompts that understand your role, industry, and goals.</p></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center"><div class="text-4xl mb-4">🚀</div><h3 class="text-xl font-bold mb-2">Accelerate Your Workflow</h3><p class="text-slate-600">From drafting emails to analyzing data, get a head start on any task with expertly structured AI templates.</p></div>
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center"><div class="text-4xl mb-4">🤖</div><h3 class="text-xl font-bold mb-2">Interactive AI Coaching</h3><p class="text-slate-600">Upgrade to Pro to chat with your AI coach, get instant feedback, and brainstorm strategies in real-time.</p></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- AI Coach Page (Free & Pro) -->
+        <div id="coachPage" class="page-content">
+             <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="max-w-4xl mx-auto">
+                    
+                    <!-- Free Version UI -->
+                    <div id="freeVersionUI">
+                        <div class="text-center pt-12 pb-8">
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">AI Professional Prompt Generator</h1>
+                            <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">What's your task or challenge? Enter a keyword to generate a personalized, professional prompt based on your profile.</p>
+                            <div class="max-w-xl mx-auto">
+                                <div class="flex flex-col sm:flex-row gap-2">
+                                    <input type="text" id="searchInputFree" class="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="e.g., 'quarterly report', 'team motivation email'">
+                                    <button onclick="handleFreeSearch()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md flex-shrink-0">Generate Prompt</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="promptGeneratedState" class="hidden bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200 my-8">
+                            <div class="mb-6 p-4 bg-gradient-to-r from-indigo-50 to-cyan-50 rounded-lg border-l-4 border-indigo-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+                               <div>
+                                   <h3 class="font-bold text-indigo-800">Upgrade to WorkWisdom.ai Pro</h3>
+                                   <p class="text-sm text-indigo-700">Unlock your AI Coach for interactive chat, instant feedback, and audio summaries.</p>
+                               </div>
+                               <button onclick="switchToPro()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-shrink-0">Unlock Pro</button>
+                            </div>
+                            <h2 class="text-2xl font-bold text-slate-900 mb-2">Your Personalized Prompt is Ready</h2>
+                            <p class="text-slate-600 mb-4">Copy the text below and paste it into your favorite AI chat tool to get expert-level assistance.</p>
+                            <div class="prompt-cue-card bg-slate-50 p-4 rounded-lg border-2 border-slate-200 text-slate-700" id="promptCueCard"></div>
+                            <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3">
+                                <button onclick="resetFreeState()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-lg transition">Create Another</button>
+                                <button onclick="copyPrompt()" class="bg-secondary text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center gap-2">Copy to Clipboard</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pro Version UI -->
+                    <div id="proVersionUI" class="hidden">
+                        <div id="welcomeState" class="text-center py-12">
+                            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Welcome to <span class="gradient-text">WorkWisdom.ai Pro</span></h1>
+                            <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">Your AI Career Coach is ready to assist. What are we working on today?</p>
+                             <div class="max-w-xl mx-auto">
+                                <div class="flex flex-col sm:flex-row gap-2">
+                                    <input type="text" id="searchInputPro" class="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="e.g., 'Presentation outline', 'Negotiation strategy'">
+                                    <button onclick="handleProSearch()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md">Get Curated Prompt</button>
+                                </div>
+                            </div>
+                        </div>
+                         <div id="loadingState" class="hidden text-center py-20">
+                             <div class="flex justify-center items-center space-x-2">
+                                <div class="loader-dots"><div class="dot1 w-4 h-4 bg-indigo-500 rounded-full"></div><div class="dot2 w-4 h-4 bg-indigo-500 rounded-full"></div><div class="dot3 w-4 h-4 bg-indigo-500 rounded-full"></div></div>
+                                <p class="text-lg text-slate-600" id="loadingMessage">Analyzing...</p>
+                            </div>
+                        </div>
+                        <div id="curatedPromptState" class="hidden bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200 my-8">
+                            <h2 class="text-2xl font-bold text-slate-900 mb-2">Your Curated Prompt</h2>
+                            <p class="text-slate-600 mb-4">We've crafted this starting point based on your professional profile. Feel free to edit it for a more precise response.</p>
+                            <textarea id="curatedPromptTextarea" class="w-full h-48 p-4 rounded-lg border-2 border-slate-200 bg-slate-50 focus:ring-2 focus:ring-indigo-500 outline-none transition"></textarea>
+                            <div class="mt-4 flex flex-col sm:flex-row justify-end gap-3">
+                                <button onclick="resetProState()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-lg transition">Start Over</button>
+                                <button onclick="getAdvice()" class="bg-secondary text-white font-bold py-2 px-6 rounded-lg shadow-md">Ask AI Coach</button>
+                            </div>
+                        </div>
+                        <div id="chatHistory" class="space-y-6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Page -->
+        <div id="resourcesPage" class="page-content">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-extrabold text-slate-900">Professional Resources</h1><p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">Expert insights and strategies to maximize your AI productivity and accelerate your career.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blogPosts"></div>
+            </div>
+        </div>
+
+        <!-- Community Page -->
+        <div id="communityPage" class="page-content">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                 <div class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-extrabold text-slate-900">Professional Community</h1><p class="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">Connect with peers, share strategies, and learn from other ambitious professionals.</p></div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+                        <h3 class="text-2xl font-bold mb-4">Share an Insight</h3>
+                         <div class="space-y-4">
+                            <input type="text" id="topicTitle" placeholder="Insight title..." class="w-full p-2 border border-slate-300 rounded-md">
+                            <textarea id="topicContent" rows="4" placeholder="Share a productivity tip or ask a question..." class="w-full p-2 border border-slate-300 rounded-md"></textarea>
+                            <button onclick="postTopic()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg">Post Insight</button>
+                        </div>
+                    </div>
+                    <div id="messageBoard" class="space-y-6"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Onboarding Modal -->
+     <div id="onboardingModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300">
+             <div class="p-6 sm:p-8 relative">
+                <button onclick="closeOnboarding()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-3xl">&times;</button>
+                <div class="text-center mb-6"><h2 class="text-2xl font-bold text-slate-900">Welcome to WorkWisdom.ai</h2><p class="text-slate-600">Let's personalize your AI experience in 3 steps.</p></div>
+                <div class="h-2 w-full bg-slate-100 rounded-full mb-6"><div id="progressFill" class="h-2 bg-indigo-600 rounded-full transition-all duration-300" style="width: 33.3%;"></div></div>
+                <div id="onboardingSteps">
+                    <div id="step1" class="step active">
+                        <h3 class="text-xl font-semibold text-center mb-4">Your Role</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="userName" placeholder="First Name" class="w-full p-2 border border-slate-300 rounded-md">
+                            <input type="text" id="jobTitle" placeholder="Your Job Title (e.g., Marketing Manager)" class="w-full p-2 border border-slate-300 rounded-md">
+                            <select id="industry" class="w-full p-2 border border-slate-300 rounded-md bg-white"><option value="">Your Industry...</option><option value="Technology">Technology</option><option value="Finance">Finance</option><option value="Healthcare">Healthcare</option><option value="Education">Education</option><option value="Marketing">Marketing</option></select>
+                        </div>
+                    </div>
+                    <div id="step2" class="step">
+                        <h3 class="text-xl font-semibold text-center mb-4">Your Experience</h3>
+                        <div class="space-y-4">
+                           <select id="experience" class="w-full p-2 border border-slate-300 rounded-md bg-white"><option value="">Years of Experience...</option><option value="0-2 years">0-2 years</option><option value="3-5 years">3-5 years</option><option value="6-10 years">6-10 years</option><option value="10+ years">10+ years</option></select>
+                           <select id="companySize" class="w-full p-2 border border-slate-300 rounded-md bg-white"><option value="">Company Size...</option><option value="Startup (1-50)">Startup (1-50)</option><option value="Mid-Size (51-1000)">Mid-Size (51-1000)</option><option value="Enterprise (1000+)">Enterprise (1000+)</option></select>
+                           <input type="text" id="skills" placeholder="Top 3 Skills (e.g., Project Management, Python)" class="w-full p-2 border border-slate-300 rounded-md">
+                        </div>
+                    </div>
+                    <div id="step3" class="step">
+                        <h3 class="text-xl font-semibold text-center mb-4">Your Goals</h3>
+                        <div class="space-y-4">
+                            <select id="primaryGoal" class="w-full p-2 border border-slate-300 rounded-md bg-white"><option value="">Primary Goal...</option><option value="Improve Productivity">Improve Productivity</option><option value="Get Promoted">Get Promoted</option><option value="Learn a New Skill">Learn a New Skill</option><option value="Improve Communication">Improve Communication</option></select>
+                            <select id="aiExperience" class="w-full p-2 border border-slate-300 rounded-md bg-white"><option value="">AI Tool Experience...</option><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select>
+                            <textarea id="biggestChallenge" rows="3" placeholder="What's your biggest work challenge right now? (Optional)" class="mt-4 w-full p-2 border border-slate-300 rounded-md"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-50 rounded-b-2xl flex justify-between items-center">
+                <div class="text-sm font-medium text-slate-500">Step <span id="currentStep">1</span> of 3</div>
+                <div><button id="prevBtn" onclick="previousStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-lg transition mr-2 hidden">Back</button><button id="nextBtn" onclick="nextStep()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition">Next</button></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white py-2 px-5 rounded-lg shadow-xl translate-x-[calc(100%+2rem)] transition-transform duration-300"><p id="toastMessage"></p></div>
+
+    <script>
+        // --- GLOBAL STATE ---
+        let userProfile = {}; let chatHistory = []; let currentOnboardingStep = 1; let isPro = false;
+        
+        // --- SAMPLE DATA ---
+        const sampleBlogPosts = [{image:'🚀',tag:'Productivity',date:'Sep 22, 2025',title:'The Art of the Perfect Prompt',excerpt:'How to talk to AI to get 10x better results in half the time.'},{image:'📈',tag:'Career Growth',date:'Sep 20, 2025',title:'Using AI to Prepare for Your Performance Review',excerpt:'Walk into your next review with data-driven accomplishments and a clear path for promotion.'},{image:'🤖',tag:'Case Study',date:'Sep 18, 2025',title:'How a Marketing Team Automated Reporting with AI',excerpt:'Learn how one team saved 20 hours per week by building an AI-powered reporting workflow.'}];
+        const sampleThreads = [{title:'Favorite AI tool for coding assistance?',author:'DevDan',content:"Beyond GitHub Copilot, what other AI tools are you all using for debugging and code generation? Looking for recommendations.",replies:32,time:'3 hours ago'},{title:'How are you using AI to manage your team?',author:'ManagerMel',content:"I'm looking for ways to use AI for things like task delegation, meeting summaries, and performance tracking. What's working for you?",replies:19,time:'8 hours ago'}];
+
+        // --- PAGE & TIER MANAGEMENT ---
+        function showPage(page) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${page}Page`).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            const navId = page === 'coach' ? 'nav-coach' : page === 'resources' ? 'nav-resources' : page === 'community' ? 'nav-community' : `nav-home`;
+            document.getElementById(navId).classList.add('active');
+            window.scrollTo(0, 0);
+            if(page === 'coach') renderAdvisorPage();
+        }
+        function switchToPro() {
+            isPro = true; localStorage.setItem('workwisdomPro', 'true'); renderAdvisorPage(); showToast("Pro Version Activated!");
+        }
+        function renderAdvisorPage() {
+            if (isPro) {
+                document.getElementById('freeVersionUI').style.display = 'none';
+                document.getElementById('proVersionUI').style.display = 'block';
+                resetProState();
+            } else {
+                document.getElementById('freeVersionUI').style.display = 'block';
+                document.getElementById('proVersionUI').style.display = 'none';
+                resetFreeState();
+            }
+        }
+
+        // --- ONBOARDING LOGIC ---
+        function showOnboarding(){document.getElementById('onboardingModal').classList.remove('opacity-0','pointer-events-none');document.querySelector('#onboardingModal > div').classList.remove('scale-95')}
+        function closeOnboarding(){document.getElementById('onboardingModal').classList.add('opacity-0','pointer-events-none');document.querySelector('#onboardingModal > div').classList.add('scale-95')}
+        function nextStep(){if(currentOnboardingStep<3){currentOnboardingStep++;document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById(`step${currentOnboardingStep}`).classList.add('active');updateOnboardingUI()}else{saveProfile();closeOnboarding();showToast("Profile saved successfully!")}}
+        function previousStep(){if(currentOnboardingStep>1){currentOnboardingStep--;document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById(`step${currentOnboardingStep}`).classList.add('active');updateOnboardingUI()}}
+        function updateOnboardingUI(){document.getElementById('currentStep').innerText=currentOnboardingStep;document.getElementById('progressFill').style.width=`${currentOnboardingStep/3*100}%`;document.getElementById('prevBtn').classList.toggle('hidden',currentOnboardingStep===1);document.getElementById('nextBtn').innerText=currentOnboardingStep===3?'Finish':'Next'}
+        function saveProfile(){userProfile={name:document.getElementById('userName').value,jobTitle:document.getElementById('jobTitle').value,industry:document.getElementById('industry').value,experience:document.getElementById('experience').value,companySize:document.getElementById('companySize').value,skills:document.getElementById('skills').value,primaryGoal:document.getElementById('primaryGoal').value,aiExperience:document.getElementById('aiExperience').value,biggestChallenge:document.getElementById('biggestChallenge').value};localStorage.setItem('workwisdomProfile',JSON.stringify(userProfile))}
+        function loadProfile(){const e=localStorage.getItem('workwisdomProfile');if(e){userProfile=JSON.parse(e);Object.keys(userProfile).forEach(e=>{const t=document.getElementById(e);if(t)t.value=userProfile[e]})}else setTimeout(showOnboarding,1500)}
+        
+        // --- UI & CONTENT RENDERING ---
+        function showToast(e){const t=document.getElementById('toast');t.innerText=e;t.classList.remove('translate-x-[calc(100%+2rem)]');setTimeout(()=>{t.classList.add('translate-x-[calc(100%+2rem)]')},3e3)}
+        function loadBlogPosts() {
+            const container = document.getElementById('blogPosts');
+            container.innerHTML = sampleBlogPosts.map(post => `<div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:-translate-y-1"><div class="h-40 hero-gradient flex items-center justify-center text-5xl">${post.image}</div><div class="p-6"><div class="text-sm text-indigo-600 font-semibold">${post.tag} &bull; ${post.date}</div><h3 class="text-xl font-bold mt-2 mb-2">${post.title}</h3><p class="text-slate-600">${post.excerpt}</p></div></div>`).join('');
+        }
+        function loadMessageBoard() {
+            const board = document.getElementById('messageBoard');
+            board.innerHTML = sampleThreads.map(t => `<div class="bg-white p-6 rounded-lg shadow-md"><h4 class="font-bold text-lg">${t.title}</h4><p class="text-sm text-slate-500 mb-2">by ${t.author} • ${t.time} • ${t.replies} replies</p><p class="text-slate-600">${t.content}</p></div>`).join('');
+        }
+        function postTopic() {
+            const title = document.getElementById('topicTitle').value;
+            const content = document.getElementById('topicContent').value;
+            if (!title || !content) return showToast('Please fill all fields');
+            sampleThreads.unshift({ title, author: userProfile.name || 'Anonymous', content, replies: 0, time: 'Just now' });
+            loadMessageBoard();
+            document.getElementById('topicTitle').value = ''; document.getElementById('topicContent').value = '';
+            showToast('Insight posted successfully!');
+        }
+        
+        // --- FREE VERSION LOGIC ---
+        function setFreeState(state) { document.getElementById('promptGeneratedState').style.display = state === 'generated' ? 'block' : 'none'; }
+        function resetFreeState() { setFreeState('initial'); document.getElementById('searchInputFree').value = ''; }
+        function handleFreeSearch() {
+            const keyword = document.getElementById('searchInputFree').value;
+            if (!keyword) return showToast("Please enter a professional topic.");
+            if (Object.keys(userProfile).length === 0) { showOnboarding(); return showToast("Please complete your profile first!"); }
+            const prompt = `As a ${userProfile.jobTitle || 'professional'} with ${userProfile.experience || 'significant'} experience in the ${userProfile.industry || 'corporate'} industry, I need to create a resource related to "${keyword}".\n\nHere is my professional context:\n- My primary goal is to: ${userProfile.primaryGoal || 'improve productivity'}.\n- My top skills include: ${userProfile.skills || 'not specified'}.\n- My biggest challenge is: ${userProfile.biggestChallenge || 'not specified'}.\n- I work in a ${userProfile.companySize || 'mid-sized'} company.\n\nPlease generate a comprehensive, expertly structured prompt that I can use with an AI to get the best possible output for this task. The prompt should specify the desired format, tone, and key points to include.`;
+            document.getElementById('promptCueCard').textContent = prompt;
+            setFreeState('generated');
+        }
+        function copyPrompt() {
+            const promptText = document.getElementById('promptCueCard').textContent;
+            navigator.clipboard.writeText(promptText).then(() => showToast('Prompt copied to clipboard!'));
+        }
+
+        // --- PRO VERSION (GEMINI API) LOGIC ---
+        function setProState(e,t=""){['welcomeState','loadingState','curatedPromptState'].forEach(e=>{document.getElementById(e).style.display='none'});document.getElementById('chatHistory').style.display='none';switch(e){case'loading':document.getElementById('loadingState').style.display='block';document.getElementById('loadingMessage').innerText=t;break;case'prompt':case'chat':document.getElementById('curatedPromptState').style.display='block';document.getElementById('chatHistory').style.display='block';break;default:document.getElementById('welcomeState').style.display='block'}}
+        function resetProState(){chatHistory=[];renderChatHistory();setProState('welcome')}
+        async function callGeminiAPI(e,t,n=3,o=1e3){const i="AIzaSyDkBHWGERIoYNeK00O_n15Uj76KEzNvpAE";const l=`https://generativelanguage.googleapis.com/v1beta/models/${e}:generateContent?key=${i}`;try{const e=await fetch(l,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(t)});if(!e.ok){if(e.status===429&&n>0){await new Promise(e=>setTimeout(e,o));return callGeminiAPI(e,t,n-1,o*2)}throw new Error(`API Error: ${e.statusText}`)}return await e.json()}catch(e){console.error("API Call failed:",e);showToast("An API error occurred.");setProState('welcome');return null}}
+        async function handleProSearch() {
+            const keyword = document.getElementById('searchInputPro').value;
+            if (!keyword) return showToast("Please enter a topic.");
+            setProState('loading', 'Crafting a strategic prompt...');
+            const systemInstruction = `You are a prompt engineering expert for business and professional development. Based on the user's professional profile and a keyword, create a detailed, strategic prompt for an AI career coach. Include placeholders for customization.`;
+            const userQuery = `User Profile: ${JSON.stringify(userProfile)}\nTask: "${keyword}"\n\nGenerate the prompt.`;
+            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents: [{ parts: [{ text: userQuery }] }] };
+            const result = await callGeminiAPI('gemini-2.5-flash-preview-05-20', payload);
+            if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                document.getElementById('curatedPromptTextarea').value = result.candidates[0].content.parts[0].text;
+                setProState('prompt');
+            } else { showToast("Could not create a prompt."); setProState('welcome'); }
+        }
+        async function getAdvice() {
+            const userPrompt = document.getElementById('curatedPromptTextarea').value;
+            chatHistory.push({ role: 'user', parts: [{ text: userPrompt }] });
+            renderChatHistory();
+            setProState('loading', 'AI Coach is strategizing...');
+            const systemInstruction = "You are WorkWisdom.ai, an expert AI career coach and productivity partner. Your advice must be strategic, actionable, and professional. You are to act as a mentor, providing clear, structured guidance. Tailor your response to the user's professional profile, offering industry-specific insights where possible.";
+            const payload = { systemInstruction: { parts: [{ text: systemInstruction }] }, contents: chatHistory };
+            const result = await callGeminiAPI('gemini-2.5-flash-preview-05-20', payload);
+            if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                const modelResponse = result.candidates[0].content.parts[0].text;
+                chatHistory.push({ role: 'model', parts: [{ text: modelResponse }] });
+                renderChatHistory();
+                setProState('chat');
+            } else { showToast("Sorry, I had trouble responding."); chatHistory.pop(); renderChatHistory(); setProState('prompt'); }
+        }
+        function renderChatHistory() {
+            const container = document.getElementById('chatHistory');
+            container.innerHTML = chatHistory.map((turn, index) => {
+                const isUser = turn.role === 'user';
+                const avatar = isUser ? `<div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center font-bold text-white">You</div>` : `<div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-2xl">🧠</div>`;
+                const contentBg = isUser ? 'bg-cyan-100' : 'bg-white';
+                const content = turn.parts[0].text.replace(/\n/g, '<br>');
+                const audioBtn = !isUser ? `<div class="mt-3"><button id="audioBtn_${index}" onclick="playAudio(this, ${index})" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">▶ Listen to Summary</button></div>` : '';
+                return `<div class="flex items-start gap-4 ${isUser ? 'justify-end' : ''}">${!isUser ? avatar : ''}<div class="${contentBg} p-4 rounded-xl max-w-xl shadow-md border border-slate-100"><div class="response-text">${content}</div>${audioBtn}</div>${isUser ? avatar : ''}</div>`;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+        function base64ToArrayBuffer(b){const c=window.atob(b),d=c.length,e=new Uint8Array(d);for(let a=0;a<d;a++)e[a]=c.charCodeAt(a);return e.buffer}function pcmToWav(e,f){const g=new ArrayBuffer(44),a=new DataView(g);function h(a,b,c){for(let d=0;d<c.length;d++)a.setUint8(b+d,c.charCodeAt(d))}return h(a,0,"RIFF"),a.setUint32(4,36+2*e.length,!0),h(a,8,"WAVE"),h(a,12,"fmt "),a.setUint32(16,16,!0),a.setUint16(20,1,!0),a.setUint16(22,1,!0),a.setUint32(24,f,!0),a.setUint32(28,2*f,!0),a.setUint16(32,2,!0),a.setUint16(34,16,!0),h(a,36,"data"),a.setUint32(40,2*e.length,!0),b=new Int16Array(44+2*e.length),b.set(new Int16Array(g),0),b.set(e,22),new Blob([b],{type:"audio/wav"})}
+        async function playAudio(button, index) {
+            button.innerHTML = '...'; button.disabled = true;
+            const textToPlay = chatHistory[index].parts[0].text;
+            const payload = {contents: [{ parts: [{ text: `Say in a clear, professional, and confident voice: ${textToPlay}` }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Rasalgethi" } } } }, model: "gemini-2.5-flash-preview-tts"};
+            const result = await callGeminiAPI('gemini-2.5-flash-preview-tts', payload);
+            if (result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data) {
+                const data = result.candidates[0].content.parts[0].inlineData, sampleRate = parseInt(data.mimeType.match(/rate=(\d+)/)[1], 10);
+                const pcm16 = new Int16Array(base64ToArrayBuffer(data.data)), wavBlob = pcmToWav(pcm16, sampleRate);
+                const audio = new Audio(URL.createObjectURL(wavBlob));
+                audio.play(); button.innerHTML = '❚❚ Playing...'; audio.onended = () => { button.innerHTML = '▶ Listen to Summary'; };
+            } else { showToast("Could not generate audio."); button.innerHTML = '▶ Listen to Summary'; }
+            button.disabled = false;
+        }
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            isPro = localStorage.getItem('workwisdomPro') === 'true';
+            showPage('home');
+            loadProfile(); loadBlogPosts(); loadMessageBoard();
+            const navMap = { home: 'nav-home', coach: 'nav-coach', resources: 'nav-resources', community: 'nav-community' };
+            Object.values(navMap).forEach(id => {
+                if(!document.getElementById(id)) console.error(`Nav element with ID ${id} not found!`);
+            });
+        });
+    </script>
+</body>
+</html>
+
